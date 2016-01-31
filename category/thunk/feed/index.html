@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+
+<channel>
+	<title>mylittlepwnage &#187; Thunk</title>
+	<atom:link href="http://blog.mylittlepwnage.com/category/thunk/feed/" rel="self" type="application/rss+xml" />
+	<link>http://blog.mylittlepwnage.com</link>
+	<description>Out of the frying pan and into the punch in the face.</description>
+	<lastBuildDate>Wed, 28 Apr 2010 06:40:02 +0000</lastBuildDate>
+	<language>en</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+	
+		<item>
+		<title>Thunk &#8212; an introduction</title>
+		<link>http://blog.mylittlepwnage.com/2009/01/13/thunk-an-introduction/</link>
+		<comments>http://blog.mylittlepwnage.com/2009/01/13/thunk-an-introduction/#comments</comments>
+		<pubDate>Tue, 13 Jan 2009 09:40:01 +0000</pubDate>
+		<dc:creator>SCdF</dc:creator>
+				<category><![CDATA[Thunk]]></category>
+
+		<guid isPermaLink="false">http://blog.mylittlepwnage.com/?p=47</guid>
+		<description><![CDATA[I&#8217;d like to talk for a moment about Thunk. Actually, it might take a while. But first, history! Thunk is a tool for writing lore. Specifically, lore one would accumulate if one was to write a fantasy / sci fi novel. Its purpose is to make adding random thoughts to your large pile of thoughts [...]]]></description>
+			<content:encoded><![CDATA[<p>I&#8217;d like to talk for a moment about Thunk.</p>
+
+<p>Actually, it might take a while.</p>
+
+<h2>But first, history!</h2>
+
+<p>Thunk is a tool for writing lore. Specifically, lore one would accumulate if one was to write a fantasy / sci fi novel. Its purpose is to make adding random thoughts to your large pile of thoughts easy, to keep your knowledge cohesive and consistent and to make it refactorable. More on these three in a later article.</p>
+
+<p>Thunk originated from my frustration at translating a collection of story / plot / setting / theme / moral / etc ideas from my head onto paper. I felt like the only way of getting these ideas out was to actually write a story. From the start, till the end. Sure, you can do things like plan out major events chapter by chapter, but it was still not a process I was comfortable with. I wanted to get stuff out about a specific character, without having to tease bits out over chapters. Linear writing didn&#8217;t seem as.. efficent as software development.</p>
+
+<p>The next step would be to take one character and write a &#8216;bio&#8217; about that person. That sort of works, but it&#8217;s really just writing a small story about someone. The process was still not abstract enough! I felt like the ultimate approach would be to the rigididy of a data-entry type approach for actual fact-knowledge about characters, while the prose would be freely written as normal, drawing from the set of knowledge I had built up.</p>
+
+<p>My original idea was simple, it would be XML with an editor that automatically generates a schema – thus providing tag completion and some validation – and an editor to take advantage of that schema. So, you could write:</p>
+
+<div class="codecolorer-container xml default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;width:435px;"><div class="xml codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap"><span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;person<span style="color: #000000; font-weight: bold;">&gt;</span></span></span><br />
+&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;name<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>James Taylor<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/name<span style="color: #000000; font-weight: bold;">&gt;</span></span></span><br />
+&nbsp; <span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;hair-colour<span style="color: #000000; font-weight: bold;">&gt;</span></span></span>brown<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/hair-colour<span style="color: #000000; font-weight: bold;">&gt;</span></span></span><br />
+<span style="color: #009900;"><span style="color: #000000; font-weight: bold;">&lt;/person<span style="color: #000000; font-weight: bold;">&gt;</span></span></span></div></div>
+
+<p>The next time you created a &lt;person&gt; element the editor could guess that you needed to fill out a name and hair colour.</p>
+
+<p>However, not even coders like XML, and its legendary verbosity was going to be a problem. I looked a few other options: wiki format was nice (linking and what-not) but didn&#8217;t provide much in the way of structure; mind maps developed information in a similar fashion to what I wanted but don&#8217;t work for anything larger than a sentence and are always acyclic; knowledge maps may have been closer but I could make head nor tail of them.</p>
+
+<p>After much agonising and wringing of hands I finally came up with something that I was comfortable with. Thunk was born.</p>
+
+<p>There are three main parts to Thunk, one of which I&#8217;ve implemented the basic of in Java, another I&#8217;ve thought a bit about and a third I&#8217;ve barely thought about at all.</p>
+
+<p>Since the last two parts are still pretty much only in my head I&#8217;m going to talk about the first part, the data model.</p>
+
+<h2>The data model</h2>
+
+<p>Thunk is, at a high level, a simple <a href="http://en.wikipedia.org/wiki/Directed_graph" onclick="pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Directed_graph?referer=http%3A%2F%2Fblog.mylittlepwnage.com%2Fcategory%2Fthunk%2F');">directed graph</a>. The complicated aspect are the nodes themselves.</p>
+
+<h3>Introducing: the &#8216;Thing&#8217;</h3>
+
+<p>Each node represents a <em>Thing</em>. A Thing is exactly what it sounds like, it&#8217;s a character, a place, an artifact, a race etc.</p>
+
+<p>Each Thing has at least two entries in it, a <em>ThingType</em> and an id. A ThingType is exactly what it sounds like, a type of Thing. So you could have a ThingType called &#8216;Character&#8217; and all your characters would use that ThingType. They are what bind groups of things together, like the &lt;person&gt; tag from our earlier XML example.</p>
+
+<p>An id is the <a href="http://en.wikipedia.org/wiki/Slug_(production)" onclick="pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Slug_production?referer=http%3A%2F%2Fblog.mylittlepwnage.com%2Fcategory%2Fthunk%2F');">slug</a>, a unique name for that Thing. If you were creating a character that might be his or her full name, such as &#8220;James Taylor&#8221;. If you were link two nodes together this is the name you would use. Everything in Thunk has an id (a reference even, for those of you who realise I&#8217;m pretty much reimplementing the class / Object relationship).</p>
+
+<p>For example, you could create a new ThingType called &#8216;Character&#8217;. You could then create a Thing:</p>
+
+<div class="codecolorer-container text default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;width:435px;"><div class="text codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">[Thing]<br />
+&nbsp; Type: Character<br />
+&nbsp; ID: Rob Robinson</div></div>
+
+<h3>Introducing: Attributes!</h3>
+
+<p>So far there isn&#8217;t much information there. Attributes are where the meat of the information is stored. Things contain a bunch of Attributes. When a new Thing is created it is populated with a bunch of empty Attributes, taken from its ThingType. As you add extra Attributes they are added to the ThingType.</p>
+
+<p>Attributes are, basically, <a href="http://en.wikipedia.org/wiki/Tree_(data_structure)" onclick="pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Tree_data_structure?referer=http%3A%2F%2Fblog.mylittlepwnage.com%2Fcategory%2Fthunk%2F');">trees</a>, with the <a href="http://en.wikipedia.org/wiki/Leaf_node" onclick="pageTracker._trackPageview('/outgoing/en.wikipedia.org/wiki/Leaf_node?referer=http%3A%2F%2Fblog.mylittlepwnage.com%2Fcategory%2Fthunk%2F');">leaves</a> being the actual data, and the other nodes being <em>Perspectives</em>, which we will discuss now.</p>
+
+<h3>Sidebar! Perspectives!</h3>
+
+<p>Perspectives, conceptually, are exactly like Things. They even have PerspectiveTypes. They can also contain attributes, although for simplicity they are name / value pairs as opposed to what&#8217;s described above.</p>
+
+<p>The role of Perspectives are to provide a perspective into some data. Two easy examples of Perspectives are time and reality (i.e. alternate dimensions).</p>
+
+<p>PerspectiveTypes, as well as possibly defining arbitrary attributes, define whether the created Perspectives are ordered or not. Time is an ordered perspective; things that happen yesterday affect the state of today. Realities are not ordered; things that happen in one reality do not spill over to another. When you create ordered Perspectives there is an additional attribute which is used to define the relationship it has with other Perspectives.</p>
+
+<p>For example, you could create a new PerspectiveType called &#8216;Time&#8217;, and it would be ordered. You could then create some Perspectives:</p>
+
+<div class="codecolorer-container text default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;width:435px;"><div class="text codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">[Perspective]<br />
+&nbsp; Type: Time<br />
+&nbsp; Name: Yesterday<br />
+&nbsp; Previous: &lt;blank&gt;<br />
+[Perspective]<br />
+&nbsp; Type: Time<br />
+&nbsp; Name: Today<br />
+&nbsp; Previous: Yesterday<br />
+[Perspective]<br />
+&nbsp; Type: Time<br />
+&nbsp; Name: Tomorrow<br />
+&nbsp; Previous: Today</div></div>
+
+<p>The first Perspective has a blank previous because it was the first Perspective of that type.</p>
+
+<p>Perspectives are losing favour with me and will probably be removed fairly soon, replaced by an upgraded Thing and.. something else. More on that at a later date.</p>
+
+<h3>Back to Attributes!</h3>
+
+<p>With the help of Perspectives, we can store more interesting information in our Attributes. As a simple example:</p>
+
+<div class="codecolorer-container text default" style="overflow:auto;white-space:nowrap;border:1px solid #9F9F9F;width:435px;"><div class="text codecolorer" style="padding:5px;font:normal 12px/1.4em Monaco, Lucida Console, monospace;white-space:nowrap">[Thing]<br />
+&nbsp; Type: Character<br />
+&nbsp; ID: Rob Robinson<br />
+&nbsp; HairColour:<br />
+&nbsp; &nbsp; &lt;default&gt;: Black<br />
+&nbsp; &nbsp; Today: Blue</div></div>
+
+<p>The &lt;default&gt; is the default Perspective. There is always one for every type.</p>
+
+<p>With this stored we could query Thunk, asking for the HairColour of Rob Robinson. By default that would return &#8216;Black&#8217;, but we if we gave it the Perspective Today or Tomorrow we would get Blue.</p>
+
+<p>This allows you to have information about characters, places etc change based on situations, such as the time, reality, personal perspective or whatever else you can think of. It makes is possible to store fare more interesting and complete information.</p>
+
+<p>That&#8217;s all I&#8217;m going to talk about for the moment. There are issues with this system that have not been resolved: PerspectiveTypes need to be ordered in some way to resolve conflicts; time travel is impossible (IRL as well!); there is no place for prose and I&#8217;m not happy with the current design of Perspectives.</p>
+
+<p>The entire idea is also overly complicated and over engineered. My hope is that I can keep boiling it down, adding more features, boiling more, until it becomes a hearty and delicious stew of features. Users won&#8217;t be directly touching any of this (if it can be avoided) so I&#8217;m leaving it up to the actual UI app to hide complexity and provide sensible defaults.</p>
+
+<p>Individual articles on these topics to follow.</p>
+]]></content:encoded>
+			<wfw:commentRss>http://blog.mylittlepwnage.com/2009/01/13/thunk-an-introduction/feed/</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		</item>
+	</channel>
+</rss>
